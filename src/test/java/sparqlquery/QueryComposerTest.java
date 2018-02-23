@@ -10,22 +10,20 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.hp.hpl.jena.vocabulary.RDF;
-
-import bg.semantic.sparql.querybuilder.QueryComposer;
 import bg.semantic.sparql.querybuilder.QueryModel;
+import bg.semantic.sparql.querybuilder.QueryVariable;
 import bg.semantic.sparql.querybuilder.SparqlQueryComposer;
+import bg.semantic.sparql.querybuilder.StatementsFactory;
 import bg.semantic.sparql.querybuilder.URIResource;
-import bg.semantic.sparql.querybuilder.Variable;
 import bg.semantic.sparql.querybuilder.blocks.BindBlock;
 import bg.semantic.sparql.querybuilder.blocks.BindStatement;
 import bg.semantic.sparql.querybuilder.blocks.FilterBlock;
+import bg.semantic.sparql.querybuilder.blocks.FilterStatement;
 import bg.semantic.sparql.querybuilder.blocks.OptionalWhereBlock;
-import bg.semantic.sparql.querybuilder.blocks.Statements;
 import bg.semantic.sparql.querybuilder.blocks.UnionBlock;
 import bg.semantic.sparql.querybuilder.blocks.WhereBlock;
-import bg.semantic.sparql.querybuilder.filters.IQueryFilter;
-import bg.semantic.sparql.querybuilder.filters.TypeQueryFilter;
+import bg.semantic.sparql.querybuilder.queryfilters.IQueryFilter;
+import bg.semantic.sparql.querybuilder.queryfilters.TypeQueryFilter;
 
 public class QueryComposerTest {
 
@@ -44,11 +42,10 @@ public class QueryComposerTest {
 		// addQueryFilter(new NutritionQueryFilter());
 		// addQueryFilter(new OptionsQueryFilter());
 
-		// TODO make querymodel interface
 		this.queryModel = prepareTestQueryModel();
 
 		try {
-			prepareQuery(queryComposer, queryModel);
+			prepareQuery(queryModel);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -65,58 +62,67 @@ public class QueryComposerTest {
 	private void addQueryFilter(IQueryFilter filter) {
 		queryFilters.add(filter);
 	}
+ 
+	private void prepareQuery( QueryModel queryModel) throws URISyntaxException {
 
-	// TODO convert to builder pattern?
-	private void prepareQuery(QueryComposer queryComposer, QueryModel queryModel) throws URISyntaxException {
-
-		Variable entityVar = new Variable("entity");
-		Variable resourceVar = new Variable("resource");
-		queryComposer.addWhereBlock(Statements.QueryCondition(resourceVar, " microdata:item ", new Variable("entity")))
+		QueryVariable entityVar = StatementsFactory.queryVariable("entity");
+		QueryVariable resourceVar = StatementsFactory.queryVariable("resource");
+		queryComposer.addWhereBlock(StatementsFactory.queryCondition(resourceVar, 
+				StatementsFactory.uriResource("microdata:item"), 
+				StatementsFactory.queryVariable("entity")))
 				.addWhereBlock(
-						Statements.QueryCondition(entityVar, RDF.type, new URIResource("http://schema.org/Recipe")))
-				.addWhereBlock(Statements.QueryCondition(entityVar, " recipe:image ", new Variable("image")))
-				.addWhereBlock(Statements.QueryCondition(entityVar, " recipe:name ", new Variable("name")));
-		// queryComposer.addWhere(new QueryConditionStatement("?ratingAgg", "
-		// <http://schema.org/AggregateRating/ratingValue> ", new
-		// Node_Variable("rating")));
-		// queryComposer.addWhere(new QueryConditionStatement("?entity", "
-		// <http://schema.org/Recipe/aggregateRating> ", new
-		// Node_Variable("ratingAgg")));
-
+						StatementsFactory.queryCondition(entityVar, 
+								StatementsFactory.uriResource("rdf:type"), 
+								StatementsFactory.uriResource("http://schema.org/Recipe")))
+				.addWhereBlock(StatementsFactory.queryCondition(entityVar, 
+						StatementsFactory.uriResource("recipe:image"), 
+						StatementsFactory.queryVariable("image")))
+				.addWhereBlock(StatementsFactory.queryCondition(entityVar, 
+						StatementsFactory.uriResource("recipe:name"), 
+						StatementsFactory.queryVariable("name")));
+		
 		List<WhereBlock> options = new ArrayList<>();
-		options.add(Statements.QueryCondition(new Variable("ratingAgg"),
-				" <http://schema.org/AggregateRating/ratingValue> ", new Variable("rating")));
-		options.add(Statements.QueryCondition(entityVar, "  <http://schema.org/Recipe/aggregateRating> ",
-				new Variable("ratingAgg")));
+		options.add(StatementsFactory.queryCondition(StatementsFactory.queryVariable("ratingAgg"),
+				new URIResource("http://schema.org/AggregateRating/ratingValue"),StatementsFactory.queryVariable("rating")));
+		options.add(StatementsFactory.queryCondition(entityVar, new URIResource("recipe:aggregateRating"),
+				StatementsFactory.queryVariable("ratingAgg")));
 		OptionalWhereBlock owb = new OptionalWhereBlock(options);
-		owb.addBlock(Statements.QueryCondition(entityVar, "  <http://schema.org/Recipe/aggregateRating> ",
-				new Variable("ratingAgg")));
+		owb.addBlock(StatementsFactory.queryCondition(entityVar, new URIResource("recipe:aggregateRating"),
+				StatementsFactory.queryVariable("ratingAgg")));
 		queryComposer.addWhereBlock(owb);
 
-		List<WhereBlock> filters = new ArrayList<>();
-		filters.add(Statements.FilterCondition("langMatches", Arrays.asList(new String[] {"lang(?name)", "\""+queryModel.getLang()+"\""} )));
-		filters.add(Statements.FilterCondition("app:customDate(?date) > \"2005-02-28T00:00:00Z\"^^xsd:dateTime", 
-				Arrays.asList(new String[]{})));
+		//List<WhereBlock> filters = new ArrayList<>();
+		//filters.add(StatementsFactory.filterCondition("langMatches", Arrays.asList(new String[] {"lang(?name)", "\""+queryModel.getLang()+"\""} )));
+		//filters.add(Statements.FilterCondition("app:customDate(?date) > \"2005-02-28T00:00:00Z\"^^xsd:dateTime", Arrays.asList(new String[]{})));
 		
-		BindBlock queryBindBlock = new BindBlock(new BindStatement("BIND", "RAND()", " ?randSort"), 150);
+		QueryVariable randSort = StatementsFactory.queryVariable("randSort");
+		BindBlock queryBindBlock = new BindBlock(new BindStatement("RAND()", randSort), 150);
 
-		WhereBlock filterStatement = Statements.FilterCondition("langMatches",
+		WhereBlock langFilter = StatementsFactory.filterCondition("langMatches",
 				Arrays.asList(new String[] { "lang(?name)", "\"" + queryModel.getLang() + "\"" }));
-		FilterBlock queryFilterBlock = new FilterBlock(filters, 200);
+		WhereBlock dateFilter = StatementsFactory.filterCondition(
+				"skos:customDate(?date) > \"2005-02-28T00:00:00Z\"^^xsd:dateTime", 
+				Arrays.asList(new String[]{}));		
 
-		UnionBlock ub = new UnionBlock(Statements.QueryCondition(entityVar, RDF.type, resourceVar), 10);
-
-		queryComposer.addWhereBlock(ub).addWhereBlock(queryBindBlock).addWhereBlock(queryFilterBlock);
-
+		FilterBlock langFilterBlock = StatementsFactory.filterBlock(langFilter);
 		
+		UnionBlock union = new UnionBlock(
+				StatementsFactory.queryCondition(entityVar, 
+						StatementsFactory.uriResource("rdf:type"), resourceVar), 10);
 		
-		// TODO candidates for querymodel interface methods
-		queryComposer.addSelectVariable(resourceVar).addSelectVariable(new Variable("image"))
-				.addOrderBy("desc(?rating) ?randSort").setLimit(Integer.toString(queryModel.getMaxResult()))
+		queryComposer.addSelectVariable(resourceVar)
+				.addSelectVariable(StatementsFactory.queryVariable("image"))
+				.addWhereBlock(union)
+				.addWhereBlock(queryBindBlock)
+				.addFilterBlock(langFilter)
+				.addFilterBlock(dateFilter)
+				.addOrderBy(StatementsFactory.queryVariable("rating"),"desc")
+				.addOrderBy(randSort)				
+				.setLimit(Integer.toString(queryModel.getMaxResult()))
 				.setOffset(Integer.toString(queryModel.getStart()));
 
 		for (IQueryFilter queryFilter : queryFilters) {
-			queryComposer.addWhereBlock(queryFilter.filter(queryModel));
+			queryComposer.addWhereBlocks(queryFilter.filter(queryModel));
 		}
 
 	}
@@ -125,7 +131,7 @@ public class QueryComposerTest {
 		QueryModel qm = new QueryModel("");
 		qm.setLang("en");
 		qm.setQ(Arrays.asList(new String[] { "salt", "pepper", "apple" }));
-		qm.setVegan(true);
+		qm.setVegan(false);
 		qm.setSeafood(true);
 		qm.setMaxFat("10000");
 		return qm;

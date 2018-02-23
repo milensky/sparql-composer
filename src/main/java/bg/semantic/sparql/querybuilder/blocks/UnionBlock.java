@@ -22,7 +22,7 @@ public class UnionBlock extends AbstractCompoundBlock  {
 		super(list, weight); 
 	}
 
-	public String setStatementString(int _index) {
+	public String toStatementString(int _index) {
 		StringBuffer sb = new StringBuffer("");
 		for (int i=0; i < unions.size(); i++ ) {
 			List<WhereBlock> union = unions.get(i);
@@ -31,7 +31,7 @@ public class UnionBlock extends AbstractCompoundBlock  {
 			}
 			sb.append(" { \n");
 			for (WhereBlock s : union) {
-				sb.append(s.setStatementString( _index));
+				sb.append(s.toStatementString( _index));
 			}
 			sb.append(" } \n");
 		}

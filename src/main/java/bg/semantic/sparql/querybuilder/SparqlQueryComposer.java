@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 
-import bg.semantic.sparql.querybuilder.blocks.QueryConditionStatement;
 import bg.semantic.sparql.querybuilder.blocks.WhereBlock;
 
 public class SparqlQueryComposer extends QueryComposer {
@@ -35,76 +34,8 @@ public class SparqlQueryComposer extends QueryComposer {
 		}
 		return this;
 	}
-	
-	@Override
-	public String getSelectClause() {
-		StringBuilder clauseBuilder = new StringBuilder();
-		for (Variable s:getSelectVariables()) {
-			clauseBuilder.append(s.toString());
-		}
-		return clauseBuilder.toString();
-	}
 
-	@Override
-	public String getWhereClause() {
-		//ParameterizedSparqlString sparqlString = new ParameterizedSparqlString(); 
-		StringBuilder sb = new StringBuilder("");
-		int _index=0;
-		for (WhereBlock whereBlock : getWhereBlocks()) {
-			sb.append(whereBlock.setStatementString( _index));
-			_index++;
-		}
-		return sb.toString();
-//		return sparqlString.toString();
-	}
-
-	@Override
-	public String getFilterClause() { 
-		int _index=0;
-		ParameterizedSparqlString sparqlString = new ParameterizedSparqlString(); 
-		/*for (QueryConditionStatement s:getFilters()) {
-			sparqlString.append(  s.getSubject() + " " + s.getCondition() + " " + " ?var"+_index );
-			if (s.getObject() instanceof Float)
-				sparqlString.setLiteral("?var"+_index, ((Float) s.getObject()).floatValue());
-			else
-				sparqlString.setLiteral("?var"+_index, s.getObject().toString());
-			sparqlString.append(" && ");
-			_index++;
-		}
-		sparqlString.append(" 1 ");*/
-		return sparqlString.toString();
-	}
-
-	@Override
-	public String getGroupByClause() { 
-		for (QueryConditionStatement s:getGroups()) {
-			
-		}
-		return "";
-	}
-	
-	@Override
-	public String getOrderByClause() {
-		StringBuilder clauseBuilder = new StringBuilder();
-		for (String s:getOrderBy()) {
-			if (s.matches("^(desc|asc).*")) {
-				clauseBuilder.append(s);
-			}
-			else {
-				clauseBuilder.append(" ?"+s);
-			}
-		}
-		return clauseBuilder.toString();
-	}
-
-	@Override
-	public String getLimitClause() { 
-		String s = getLimit();
-		
-		return s;
-	}
-	
-	@Override
+ 
 	public String getComposedQuery() {
 		StringBuffer buff = new StringBuffer();
 
@@ -116,11 +47,11 @@ public class SparqlQueryComposer extends QueryComposer {
 			buff.append(whereClause);
 		}
 
-		/*	if (getFilters().size() > 0) {
+			if (getFilters().size() > 0) {
 				buff.append("FILTER  ( \n");
 				buff.append(getFilterClause());
 				buff.append(" ) \n");
-			}*/
+			}
 			if (getGroups().size() > 0) {
 				buff.append("GROUP BY  { \n");
 				buff.append(getGroupByClause());
@@ -146,11 +77,6 @@ public class SparqlQueryComposer extends QueryComposer {
 		return sparqlQuery.toString();
 	}
 
-	@Override
-	public String getOffsetClause() {
-		String s = getOffset();
-		
-		return s;
-	}
+ 
 	
 }

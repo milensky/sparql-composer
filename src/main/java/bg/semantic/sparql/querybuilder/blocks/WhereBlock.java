@@ -18,5 +18,5 @@ public interface WhereBlock extends Comparable<WhereBlock> {
 	 * @param _index is used for generating proper SPARQL variable names
 	 * @return
 	 */
-	public String setStatementString(int _index);
+	public String toStatementString(int _index);
 }

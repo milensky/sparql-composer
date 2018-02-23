@@ -1,4 +1,4 @@
-package bg.semantic.sparql.querybuilder.filters;
+package bg.semantic.sparql.querybuilder.queryfilters;
 
 import org.apache.jena.graph.Node_Variable;
 

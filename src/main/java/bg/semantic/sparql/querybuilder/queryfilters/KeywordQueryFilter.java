@@ -1,4 +1,4 @@
-package bg.semantic.sparql.querybuilder.filters;
+package bg.semantic.sparql.querybuilder.queryfilters;
 
 import java.net.MalformedURLException;
 import java.net.URI;

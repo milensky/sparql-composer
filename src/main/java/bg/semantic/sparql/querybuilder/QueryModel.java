@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class QueryModel  {
+public class QueryModel   {
 	
 	private boolean vegan;	
 	private boolean vegetarian;
@@ -29,8 +29,7 @@ public class QueryModel  {
 	private int start = 0; // query page start
 	private int maxResult = 20; // query page size
 		
-	 
-	//TODO consider change to MAP?
+
 	public QueryModel(String s) {
 		/*Map<String,String[]> params = new HashMap<String, String[]>();
 		RequestUtil.parseParameters(params, s, "UTF-8");

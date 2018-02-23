@@ -1,4 +1,4 @@
-package bg.semantic.sparql.querybuilder.filters;
+package bg.semantic.sparql.querybuilder.queryfilters;
 
 import java.util.List;
 
@@ -12,5 +12,6 @@ import bg.semantic.sparql.querybuilder.blocks.WhereBlock;
  */
 public interface IQueryFilter {
 
-	public List<WhereBlock> filter(QueryModel queryModel);
+	List<WhereBlock> filter(QueryModel queryModel);
+
 }

@@ -4,15 +4,25 @@ import java.util.List;
 
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 
+import bg.semantic.sparql.querybuilder.QueryVariable;
+
 public class BindStatement implements WhereBlock {
 	private int weight = 100;
 	private String bindFunction;
 	private String[] arguments;
 	
-	public BindStatement(String bindFunction,String...  arguments) {
-		this.bindFunction = bindFunction;
+	public BindStatement(String...  arguments) {
+		this.bindFunction = "BIND";
 		this.arguments = arguments;
 	}
+	
+	public BindStatement(String bindFunction, QueryVariable var) {
+		this.bindFunction = "BIND";
+		this.arguments = new String[2];
+		this.arguments[0] = bindFunction;
+		this.arguments[1] = var.sparqlEncode();
+	}
+	
 	
 	public BindStatement(String bindFunction, List<String> arguments ) {
 		this.bindFunction = bindFunction;
@@ -30,7 +40,7 @@ public class BindStatement implements WhereBlock {
 	}
 
 	@Override
-	public String setStatementString(int _index) {
+	public String toStatementString(int _index) {
 		ParameterizedSparqlString sb = new ParameterizedSparqlString(); 
 		sb.append(bindFunction);
 		sb.append("(");
