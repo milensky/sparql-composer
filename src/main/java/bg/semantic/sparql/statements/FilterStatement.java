@@ -1,15 +1,18 @@
-package bg.semantic.sparql.querybuilder.blocks;
+package bg.semantic.sparql.statements;
 
 import java.util.List;
 
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
+
+import bg.semantic.sparql.querybuilder.blocks.FilterBlock;
+import bg.semantic.sparql.querybuilder.blocks.WhereBlock;
 
 public class FilterStatement extends FilterBlock implements WhereBlock {
 	private int weight = 200;
 	private String filterFunction;
 	private String[] arguments;
 	
-	public FilterStatement(String filterFunction, List<String> arguments ) {		
+	FilterStatement(String filterFunction, List<String> arguments ) {		
 		this.filterFunction = filterFunction;
 		this.arguments = (String[]) arguments.toArray();
 	}

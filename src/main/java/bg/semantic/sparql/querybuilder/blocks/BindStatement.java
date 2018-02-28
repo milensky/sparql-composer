@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 
-import bg.semantic.sparql.querybuilder.QueryVariable;
+import bg.semantic.sparql.resources.QueryVariable;
 
 public class BindStatement implements WhereBlock {
 	private int weight = 100;

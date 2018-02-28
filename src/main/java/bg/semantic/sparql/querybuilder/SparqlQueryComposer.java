@@ -11,7 +11,7 @@ public class SparqlQueryComposer extends QueryComposer {
 	
 	private ParameterizedSparqlString sparqlQuery;
 	
-	public SparqlQueryComposer(/*ParameterizedSparqlString sparqlString*/) {
+	public SparqlQueryComposer() {
 		this.sparqlQuery = new ParameterizedSparqlString();
 	}
 	

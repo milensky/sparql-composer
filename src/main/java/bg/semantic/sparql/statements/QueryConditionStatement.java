@@ -1,4 +1,4 @@
-package bg.semantic.sparql.querybuilder;
+package bg.semantic.sparql.statements;
 
 import java.net.URI;
 import java.net.URL;
@@ -11,6 +11,9 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 import bg.semantic.sparql.querybuilder.blocks.WhereBlock;
+import bg.semantic.sparql.resources.QueryVariable;
+import bg.semantic.sparql.resources.RdfResource;
+import bg.semantic.sparql.resources.URIResource;
 
 public class QueryConditionStatement implements WhereBlock  {
 

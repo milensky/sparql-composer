@@ -1,9 +1,10 @@
-package sparqlquery;
+package bg.semantic.sparql.statements;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import bg.semantic.sparql.querybuilder.URIResource;
+import bg.semantic.sparql.resources.ResourceFactory;
+import bg.semantic.sparql.resources.URIResource;
 
 public class RdfIRITest {
 	URIResource prefixedResource;
@@ -11,8 +12,8 @@ public class RdfIRITest {
 	
 	@Before
 	public void setup() {
-		unPrefixedResource = new URIResource("http://xmlns.com/foaf/0.1/name");
-		prefixedResource = new URIResource("xsd:int");		
+		unPrefixedResource = ResourceFactory.uriResource("http://xmlns.com/foaf/0.1/name");
+		prefixedResource = ResourceFactory.uriResource("xsd:int");		
 	}
 
 	@Test

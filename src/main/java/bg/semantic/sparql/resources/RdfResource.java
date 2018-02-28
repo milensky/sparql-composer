@@ -1,4 +1,4 @@
-package bg.semantic.sparql.querybuilder;
+package bg.semantic.sparql.resources;
 
 public interface RdfResource {
 

@@ -7,15 +7,15 @@ public class FilterBlock extends AbstractCompoundBlock {
 	
 	protected FilterBlock() {}
 	
-	public FilterBlock(int weight) {		
+	FilterBlock(int weight) {		
 		super(weight);
 	}
 
-	public FilterBlock(WhereBlock block, int weight) {
+	FilterBlock(WhereBlock block, int weight) {
 		super(block, weight);
 	}
 
-	public FilterBlock(List<WhereBlock> list,int weight) {
+	FilterBlock(List<WhereBlock> list,int weight) {
 		super(list,weight);		
 	}
 

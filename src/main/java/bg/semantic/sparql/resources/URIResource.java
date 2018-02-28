@@ -1,4 +1,4 @@
-package bg.semantic.sparql.querybuilder;
+package bg.semantic.sparql.resources;
 
 import org.apache.jena.iri.IRI;
 import org.apache.jena.iri.IRIFactory;
@@ -7,7 +7,7 @@ public class URIResource implements RdfResource {
 
 	private String iri;
 	
-	public URIResource(String uri) {
+	URIResource(String uri) {
 		if (uri.contains(":")) { 
 			this.iri  = uri;
 		}

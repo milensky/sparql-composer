@@ -1,8 +1,7 @@
-package bg.semantic.sparql.querybuilder.queryfilters;
+package bg.semantic.sparql.statements;
 
 import java.util.List;
 
-import bg.semantic.sparql.querybuilder.QueryModel;
 import bg.semantic.sparql.querybuilder.blocks.WhereBlock;
 
 /**

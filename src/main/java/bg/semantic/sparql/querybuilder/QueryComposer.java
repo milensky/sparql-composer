@@ -7,8 +7,10 @@ import java.util.List;
 import com.hp.hpl.jena.query.ParameterizedSparqlString;
 
 import bg.semantic.sparql.querybuilder.blocks.FilterBlock;
-import bg.semantic.sparql.querybuilder.blocks.FilterStatement;
 import bg.semantic.sparql.querybuilder.blocks.WhereBlock;
+import bg.semantic.sparql.resources.QueryVariable;
+import bg.semantic.sparql.statements.FilterStatement;
+import bg.semantic.sparql.statements.QueryConditionStatement;
 
 public abstract class QueryComposer {
 	private final List<QueryVariable> selectVariables;
